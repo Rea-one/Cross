@@ -1,7 +1,3 @@
-import { TutorialView } from '../view/TutorialView';
-import { Banner } from '../view/Banner';
-import { EnablementView } from '../view/EnablementView';
-
 @Entry
 @Component
 struct Index {
