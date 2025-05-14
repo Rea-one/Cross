@@ -1,23 +1,19 @@
+import pageStack from "../viewmodel/navigator"
+import pageMap from "../viewmodel/page_map"
+import nets from "../viewmodel/nets"
+
 @Entry
 @Component
 struct Index {
-  @State message: string = 'Hello World';
+  aboutToAppear(): void {
+    nets.init()
+    nets.connect()
+  }
 
   build() {
-    RelativeContainer() {
-      Text(this.message)
-        .id('HelloWorld')
-        .fontSize($r('app.float.page_text_font_size'))
-        .fontWeight(FontWeight.Bold)
-        .alignRules({
-          center: { anchor: '__container__', align: VerticalAlign.Center },
-          middle: { anchor: '__container__', align: HorizontalAlign.Center }
-        })
-        .onClick(() => {
-          this.message = 'Welcome';
-        })
+    Navigation(pageStack.The){
+
     }
-    .height('100%')
-    .width('100%')
+    .navDestination(pageMap.The)
   }
 }

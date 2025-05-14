@@ -1,6 +1,6 @@
 
 
-export class Group {
+export default class Group {
   ID: string = "";
   Timestamp: string = "";
 

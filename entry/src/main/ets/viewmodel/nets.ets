@@ -1,13 +1,14 @@
 import { socket } from '@kit.NetworkKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { SocketInfo } from './socket';
+import { SocketInfo } from '../model/socket';
 
 
-export class Nets {
+class Nets {
   Sock: socket.TCPSocket = socket.constructTCPSocketInstance();
   address: socket.NetAddress = {} as socket.NetAddress;
 
   init(){
+    // 启动网络
     this.address.address = '192.168.43.188';
     this.address.port = 25054;
   }
@@ -32,3 +33,4 @@ export class Nets {
   }
 }
 
+export default new Nets()

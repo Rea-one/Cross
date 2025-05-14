@@ -5,7 +5,7 @@ import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 
 
-export class Store extends UIAbility {
+class Store extends UIAbility {
   store: distributedKVStore.KVManager | null = null
 
   onCreate(): void {
@@ -30,3 +30,5 @@ export class Store extends UIAbility {
     });
   }
 }
+
+export  default new Store()
