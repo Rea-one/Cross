@@ -29,6 +29,10 @@ class Dism {
   put(index: string, key: string, target: object) {
     this.The[index].put(key, target)
   }
+
+  tar(key: string): manager {
+    return this.The[key];
+  }
 }
 
 export default new Dism()
