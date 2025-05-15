@@ -5,11 +5,6 @@ import nets from "../viewmodel/nets"
 @Entry
 @Component
 struct Index {
-  aboutToAppear(): void {
-    nets.init()
-    nets.connect()
-  }
-
   build() {
     Navigation(pageStack.The){
 

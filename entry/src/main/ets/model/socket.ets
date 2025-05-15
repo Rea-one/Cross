@@ -1,4 +1,4 @@
-import { socket } from '@kit.NetworkKit';
+import { socket } from "@kit.NetworkKit";
 
 
 export default class SocketInfo {

@@ -1,8 +1,8 @@
-import { distributedKVStore } from '@kit.ArkData';
-import { Content } from '@ohos.arkui.node';
-import { window } from '@kit.ArkUI';
-import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
-import { BusinessError } from '@kit.BasicServicesKit';
+
+
+import distributedKVStore from "@ohos.data.distributedKVStore";
+import { AbilityConstant, UIAbility, Want } from "@kit.AbilityKit";
+import { BusinessError } from "@kit.BasicServicesKit";
 
 
 class Store extends UIAbility {

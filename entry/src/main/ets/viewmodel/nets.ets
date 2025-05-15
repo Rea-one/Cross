@@ -1,15 +1,23 @@
-import { socket } from '@kit.NetworkKit';
-import { BusinessError } from '@kit.BasicServicesKit';
-import { SocketInfo } from '../model/socket';
 
+
+import SocketInfo from "../model/socket";
+
+import { socket } from "@kit.NetworkKit";
+import { BusinessError } from "@kit.BasicServicesKit";
+import { UIAbility } from "@kit.AbilityKit";
 
 class Nets {
   Sock: socket.TCPSocket = socket.constructTCPSocketInstance();
   address: socket.NetAddress = {} as socket.NetAddress;
 
+  constructor() {
+    this.init();
+    this.connect();
+  }
+
   init(){
     // 启动网络
-    this.address.address = '192.168.43.188';
+    this.address.address = "192.168.43.188";
     this.address.port = 25054;
   }
 
