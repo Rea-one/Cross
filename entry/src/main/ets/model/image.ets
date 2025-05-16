@@ -1,6 +1,6 @@
 
 export default class Image {
   ID: string = "";
-  TimeStamp: string = "";
+  Timestamp: string = "";
   IconID: string = "";
 }

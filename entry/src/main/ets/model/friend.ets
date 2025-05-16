@@ -5,6 +5,5 @@ export default class Friend {
   Timestamp: string = "";
   State: string = "";
 
-
   Group: string = "";
 }

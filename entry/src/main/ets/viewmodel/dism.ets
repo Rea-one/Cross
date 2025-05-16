@@ -23,14 +23,26 @@ class Dism {
     }
   }
 
+  check (store: string) {
+    if (this.The[store]) {
+      return
+    } else {
+      this.targets.push(store);
+      this.The[store] = new manager(store);
+    }
+  }
+
   get(index: string, key: string): object {
+    this.check(index);
     return this.The[index].get(key)
   }
   put(index: string, key: string, target: object) {
+    this.check(index);
     this.The[index].put(key, target)
   }
 
   tar(key: string): manager {
+    this.check(key);
     return this.The[key];
   }
 }
