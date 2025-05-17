@@ -7,7 +7,7 @@ import { arrayBufferToString } from "../util/BufferUtil"
 import info from "../model/info"
 import One from "../model/one";
 import Group from "../model/group";
-import { info2friend, info2group, info2message, info2one } from "../util/intrans";
+import { info2friend, info2group, info2image, info2message, info2one } from "../util/intrans";
 
 
 class Syncer {
@@ -45,8 +45,13 @@ class Syncer {
           waiter.write("message", "ID", the_message);
           break;
         case "image":
+          let the_img = info2image(now);
+          waiter.write("image", the_img.ID, the_img);
+        case "config":
+          waiter.write("config", "", now);
           break;
       }
+      waiter.sync();
     })
   }
 

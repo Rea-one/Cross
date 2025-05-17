@@ -14,7 +14,7 @@ import distributedKVStore from "@ohos.data.distributedKVStore"
 
 
 class Waiter {
-  public ID: string = "";
+  public The_cfg: config = new config();
   public The_hot: hot = new hot();
   public The_one: Map<string, one> = new Map();
   public The_grp: Map<string, group> = new Map();
@@ -25,7 +25,7 @@ class Waiter {
   stpList: [string, string][] = [];
 
   constructor() {
-    this.ID = pref.get("ID");
+    this.The_cfg = pref.getOBJ("ID") as config;
     this.The_hot = pref.getOBJ("hot") as hot;
     this.The_one = dism.The["one"].getAllEntries();
     this.The_grp = dism.The["group"].getAllEntries();
@@ -51,6 +51,8 @@ class Waiter {
       case "image":
         this.The_img[ID] = obj;
         break;
+      case "config":
+        this.actConfig(obj as config);
       default:
         return;
     }
@@ -73,10 +75,22 @@ class Waiter {
           dism.put("message", elem[1], this.The_frd[elem[1]]);
         case "image":
           dism.put("image", elem[1], this.The_frd[elem[1]]);
+        case "config":
+          pref.putOBJ("config", this.The_cfg);
         default:
           break;
       }
       elem = this.stpList.pop();
+    }
+  }
+
+  actConfig(cfg: config) {
+    this.The_cfg.Timestamp = cfg.Timestamp;
+    if (cfg.ID != "") {
+      this.The_cfg.ID = cfg.ID;
+    }
+    if (cfg.State != "") {
+      this.The_cfg.State = cfg.State;
     }
   }
 }
