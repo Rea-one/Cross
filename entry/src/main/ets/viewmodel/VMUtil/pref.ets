@@ -1,5 +1,5 @@
 
-import { TransInside, TransOutside } from "../util/intrans"
+import { TransInside, TransOutside } from "../../util/intrans"
 
 import { preferences } from "@kit.ArkData"
 import { UIAbility } from "@kit.AbilityKit"

@@ -8,8 +8,8 @@ import message from "../model/message"
 
 import hot from "../model/hot"
 
-import dism from "./dism"
-import pref from "./pref"
+import dism from "./VMUtil/dism"
+import pref from "./VMUtil/pref"
 import distributedKVStore from "@ohos.data.distributedKVStore"
 
 

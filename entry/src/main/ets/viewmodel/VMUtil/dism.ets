@@ -1,17 +1,17 @@
 
 
-import manager from "./store_tar"
+import StoreTar from "./store_tar"
 
 
 import distributedKVStore from "@ohos.data.distributedKVStore"
 
 class Dism {
-  The: Map<string, manager> = new Map<string, manager>();
+  The: Map<string, StoreTar> = new Map<string, StoreTar>();
   public targets: string[] = [];
 
   constructor() {
     for (let elem of this.targets) {
-      this.The[elem] = new manager(elem);
+      this.The[elem] = new StoreTar(elem);
     }
   }
 
@@ -19,7 +19,7 @@ class Dism {
     this.The.clear();
     this.targets = value;
     for (let elem of this.targets) {
-      this.The[elem] = new manager(elem);
+      this.The[elem] = new StoreTar(elem);
     }
   }
 
@@ -28,7 +28,7 @@ class Dism {
       return
     } else {
       this.targets.push(store);
-      this.The[store] = new manager(store);
+      this.The[store] = new StoreTar(store);
     }
   }
 
@@ -41,7 +41,7 @@ class Dism {
     this.The[index].put(key, target)
   }
 
-  tar(key: string): manager {
+  tar(key: string): StoreTar {
     this.check(key);
     return this.The[key];
   }

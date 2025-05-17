@@ -1,7 +1,7 @@
 import store from "./store";
 
-import { Options } from "../model/options";
-import { TransInside, TransOutside } from "../util/intrans"
+import { Options } from "../../model/options";
+import { TransInside, TransOutside } from "../../util/intrans"
 
 
 import distributedKVStore from "@ohos.data.distributedKVStore";

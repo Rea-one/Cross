@@ -1,7 +1,7 @@
 
 import nets from "./nets"
 import waiter from "./waiter"
-import pref from "./pref"
+import pref from "./VMUtil/pref"
 import SocketInfo from "../model/socket";
 import { arrayBufferToString } from "../util/BufferUtil"
 import info from "../model/info"
