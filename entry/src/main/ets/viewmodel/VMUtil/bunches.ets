@@ -4,6 +4,7 @@ import Image from '../../model/image';
 import Message from '../../model/message';
 import One from '../../model/one';
 import StoreTar from "./store_tar"
+import { max, min } from "../../util/normal"
 
 class Bunch {
   ID: string = "";
@@ -201,7 +202,7 @@ class MessageBunch extends Bunch {
   }
   __ubmit(the: MessageBun) {
     if (this.fast[the.ID]) {
-      this.The[this.fast[the.ID]] = the;
+      this.addBun(the);
       return false;
     } else {
       this.__submit(the);
@@ -216,14 +217,35 @@ class MessageBunch extends Bunch {
   }
 
   add(the: Message) {
-    if (!this.filterCheck(this.fast[the.sender]) && this.fast[the.sender]) {
-      this.cache.push(the.sender);
-      this.The[this.fast[the.sender]].submit(the);
-    } else if (!this.filterCheck(this.fast[the.receiver]) && this.fast[the.receiver]) {
-      this.cache.push(the.receiver);
-      this.The[this.fast[the.receiver]].submit(the);
+    let targetID = '';
+
+    if (this.fast[the.sender] !== undefined && !this.filterCheck(the.sender)) {
+      targetID = the.sender;
+    } else if (this.fast[the.receiver] !== undefined && !this.filterCheck(the.receiver)) {
+      targetID = the.receiver;
+    }
+
+    if (targetID) {
+      // ✅ 新增：防止重复 push
+      if (!this.cache.includes(targetID)) {
+        this.cache.push(targetID);
+      }
+      this.The[this.fast[targetID]].submit(the);
     } else {
       console.warn("不存在该好友，消息无法添加");
+    }
+  }
+
+  addBun(the: MessageBun) {
+    if (this.fast[the.ID]) {
+      let begin = min(the.cache.length, this.The[this.fast[the.ID]].cache.length);
+      let end = max(the.cache.length, this.The[this.fast[the.ID]].cache.length);
+      for (let order = begin; order < end; order ++) {
+        if (order = this.The[this.fast[the.ID]].cache.length) {
+          break;
+        }
+        this.The[this.fast[the.ID]].submit(the.The[the.cache[order]]);
+      }
     }
   }
 
