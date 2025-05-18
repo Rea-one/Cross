@@ -1,87 +1,99 @@
 
 import config from "../model/config"
-import group from "../model/group"
-import one from "../model/one"
-import image from "../model/image"
-import friend from "../model/friend"
-import message from "../model/message"
+import { OneBunch, GroupBunch, FriendBunch, MessageBunch, ImageBunch, FriendReqBunch } from "./VMUtil/bunches"
 
 import hot from "../model/hot"
 
 import dism from "./VMUtil/dism"
 import pref from "./VMUtil/pref"
+
+
+
 import distributedKVStore from "@ohos.data.distributedKVStore"
+import One from "../model/one"
+import Group from "../model/group"
+import Friend from "../model/friend"
+import Message from "../model/message"
+import Image from "../model/image"
 
 
 class Waiter {
   public The_cfg: config = new config();
   public The_hot: hot = new hot();
-  public The_one: Map<string, one> = new Map();
-  public The_grp: Map<string, group> = new Map();
-  public The_frd: Map<string, friend> = new Map();
-  public The_img: Map<string, image> = new Map();
-  public The_msg: Map<string, message> = new Map();
+  public The_one: OneBunch = new OneBunch();
+  public The_grp: GroupBunch = new GroupBunch();
+  public The_frd: FriendBunch = new FriendBunch();
+  public The_msg: MessageBunch = new MessageBunch();
+  public The_img: ImageBunch = new ImageBunch();
+  public The_frq: FriendReqBunch= new FriendReqBunch();
   // 库键 对象键
   stpList: [string, string][] = [];
 
+  private initialized: boolean = false;
+
   constructor() {
-    this.The_cfg = pref.getOBJ("ID") as config;
-    this.The_hot = pref.getOBJ("hot") as hot;
-    this.The_one = dism.The["one"].getAllEntries();
-    this.The_grp = dism.The["group"].getAllEntries();
-    this.The_frd = dism.The["friend"].getAllEntries();
-    this.The_msg = dism.The["message"].getAllEntries();
-    this.The_img = dism.The["image"].getAllEntries();
+    this.init();
   }
 
-  write(key: string, ID: string, obj: object) {
+
+  async init(): Promise<void> {
+    try {
+      this.The_cfg = pref.getOBJ("ID") as config;
+      this.The_hot = pref.getOBJ("hot") as hot;
+
+      // 并行加载所有数据
+      await Promise.all([
+        this.The_one.load(dism.The["one"]),
+        this.The_grp.load(dism.The["group"]),
+        this.The_frd.load(dism.The["friend"]),
+        this.The_msg.load(dism.The["message"]),
+        this.The_img.load(dism.The["image"]),
+        this.The_frq.load(dism.The["friendReq"])
+      ]);
+
+      this.The_msg.setFilter(this.The_cfg.ID);
+      this.initialized = true;
+    } catch (error) {
+      console.error("Waiter 初始化失败:", error);
+    }
+  }
+
+  isInitialized(): boolean {
+    return this.initialized;
+  }
+
+  write(key: string, obj: object) {
     switch (key) {
       case "one":
-        this.The_one[ID] = obj;
+        this.The_one.ubmit(obj as One);
         break;
       case "group":
-        this.The_grp[ID] = obj;
+        this.The_grp.ubmit(obj as Group);
         break;
       case "friend":
-        this.The_frd[ID] = obj;
+        this.The_frd.ubmit(obj as Friend);
         break;
       case "message":
-        this.The_msg[ID] = (obj);
+        this.The_msg.add(obj as Message);
         break;
       case "image":
-        this.The_img[ID] = obj;
+        this.The_img.ubmit(obj as Image);
         break;
       case "config":
         this.actConfig(obj as config);
       default:
         return;
     }
-    this.stpList.push([key, ID]);
-    dism.The[key].put(obj);
   }
 
 
-  sync() {
-    let elem = this.stpList.pop();
-    while (elem != undefined) {
-      switch (elem[0]) {
-        case "one":
-          dism.put("one", elem[1], this.The_one[elem[1]]);
-        case "group":
-          dism.put("group", elem[1], this.The_grp[elem[1]]);
-        case "friend":
-          dism.put("friend", elem[1], this.The_frd[elem[1]]);
-        case "message":
-          dism.put("message", elem[1], this.The_frd[elem[1]]);
-        case "image":
-          dism.put("image", elem[1], this.The_frd[elem[1]]);
-        case "config":
-          pref.putOBJ("config", this.The_cfg);
-        default:
-          break;
-      }
-      elem = this.stpList.pop();
-    }
+  save() {
+    this.The_one.save(dism.The["one"]);
+    this.The_grp.save(dism.The["group"]);
+    this.The_frd.save(dism.The["friend"]);
+    this.The_msg.save(dism.The["message"]);
+    this.The_img.save(dism.The["image"]);
+    this.The_frq.save(dism.The["friendReq"]);
   }
 
   actConfig(cfg: config) {

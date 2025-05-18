@@ -7,7 +7,7 @@ import distributedKVStore from "@ohos.data.distributedKVStore"
 
 class Dism {
   The: Map<string, StoreTar> = new Map<string, StoreTar>();
-  public targets: string[] = [];
+  public targets: string[] = ["one", "group", "friend", "message", "image", "friendReq"];
 
   constructor() {
     for (let elem of this.targets) {

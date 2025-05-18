@@ -1,9 +1,8 @@
-
+import navigator from "../viewmodel/navigator"
 
 @Component
 export struct WaitPage
 {
-  @Consume('pageStack') pageStack:NavPathStack
   build()
   {
     NavDestination()

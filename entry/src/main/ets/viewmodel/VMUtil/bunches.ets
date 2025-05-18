@@ -1,14 +1,16 @@
-import Friend from '../../model/friend';
-import Group from '../../model/group';
-import Image from '../../model/image';
-import Message from '../../model/message';
-import One from '../../model/one';
+import One from "../../model/one";
+import Group from "../../model/group";
+import Friend from "../../model/friend";
+import Message from "../../model/message";
+import Image from "../../model/image";
+import FriendReq from "../../model/friend_req"
 import StoreTar from "./store_tar"
 import { max, min } from "../../util/normal"
 
-class Bunch {
+export class Bunch<T> {
   ID: string = "";
-  fast: Map<string, number> = new Map();
+  public The: T[] = []
+  public fast: Map<string, number> = new Map();
   cache: string[] = []
 
   // IDCheck(the: Bunch) {
@@ -17,11 +19,20 @@ class Bunch {
   async load(the: StoreTar) {};
   submit(the: object) {};
   ubmit(the: object) {};
-  save(the: StoreTar) {};
+  save(the: StoreTar) {
+    for (let now = this.cache.pop(); now != undefined; now = this.cache.pop()) {
+      the.put(now, this.The[this.fast[now]] as object);
+    }
+  }
+  get(ID: string) {
+    if (this.fast[ID]) {
+      return this.The[this.fast[ID]];
+    }
+    return null;
+  }
 }
 
-class OneBunch extends Bunch {
-  The: One[] = [];
+export class OneBunch extends Bunch<One> {
 
   async load(the: StoreTar): Promise<void> {
     const entries = await the.getAllEntries();
@@ -43,11 +54,7 @@ class OneBunch extends Bunch {
     this.The.push(the);
     return true;
   }
-  submit(the: One) {
-    if (this.__submit(the)) {
-      this.cache.push(the.ID);
-    }
-  }
+
   __ubmit(the: One) {
     if (this.fast[the.ID]) {
       this.The[this.fast[the.ID]] = the;
@@ -63,15 +70,9 @@ class OneBunch extends Bunch {
       this.cache.push(the.ID);
     }
   }
-  save(the: StoreTar) {
-    for (let now = this.cache.pop(); now != undefined; now = this.cache.pop()) {
-      the.put(now, this.The[this.fast[now]]);
-    }
-  }
 }
 
-class GroupBunch extends Bunch {
-  The: Group[] = [];
+export class GroupBunch extends Bunch<Group> {
 
   async load(the: StoreTar): Promise<void> {
     const entries = await the.getAllEntries();
@@ -113,16 +114,11 @@ class GroupBunch extends Bunch {
       this.cache.push(the.ID);
     }
   }
-  save(the: StoreTar) {
-    for (let now = this.cache.pop(); now != undefined; now = this.cache.pop()) {
-      the.put(now, this.The[this.fast[now]]);
-    }
-  }
+
 }
 
 
-class FriendBunch extends Bunch {
-  The: Friend[] = [];
+export class FriendBunch extends Bunch<Friend> {
 
   async load(the: StoreTar): Promise<void> {
     const entries = await the.getAllEntries();
@@ -164,16 +160,45 @@ class FriendBunch extends Bunch {
       this.cache.push(the.ID);
     }
   }
-  save(the: StoreTar) {
-    for (let now = this.cache.pop(); now != undefined; now = this.cache.pop()) {
-      the.put(now, this.The[this.fast[now]]);
+}
+
+export class MessageBun extends Bunch<Message> {
+
+  __submit(the: Message) {
+    if (this.fast[the.ID]) {
+      console.warn(`已存在的数据，拒绝  类型：${typeof this}`)
+      return false;
+    }
+    this.fast[the.ID] = this.The.length;
+    this.The.push(the);
+    return true;
+  }
+  submit(the: Message) {
+    if (this.__submit(the)) {
+      this.cache.push(the.ID);
+    }
+  }
+  __ubmit(the: Message) {
+    if (this.fast[the.ID]) {
+      this.The[this.fast[the.ID]] = the;
+      return false;
+    } else {
+      this.__submit(the);
+      return true;
+    }
+  }
+
+  // 目前禁止更新
+  ubmit(the: Message) {
+    return;
+    if (this.__ubmit(the)) {
+      this.cache.push(the.ID);
     }
   }
 }
 
-class MessageBunch extends Bunch {
-  The: MessageBun[] = [];
-  filter: Map<string, boolean> = new Map();
+export class MessageBunch extends Bunch<MessageBun> {
+  public filter: Map<string, boolean> = new Map();
 
   async load(the: StoreTar): Promise<void> {
     const entries = await the.getAllEntries();
@@ -238,13 +263,22 @@ class MessageBunch extends Bunch {
 
   addBun(the: MessageBun) {
     if (this.fast[the.ID]) {
-      let begin = min(the.cache.length, this.The[this.fast[the.ID]].cache.length);
-      let end = max(the.cache.length, this.The[this.fast[the.ID]].cache.length);
-      for (let order = begin; order < end; order ++) {
-        if (order = this.The[this.fast[the.ID]].cache.length) {
+      const targetIndex: number = this.fast[the.ID];
+      const target = this.The[targetIndex];
+
+      let begin = min(the.cache.length, target.cache.length);
+      let end = max(the.cache.length, target.cache.length);
+
+      for (let order = begin; order < end; order++) {
+        if (order === target.cache.length) {
           break;
         }
-        this.The[this.fast[the.ID]].submit(the.The[the.cache[order]]);
+        target.submit(the.The[the.cache[order]]);
+      }
+
+      // ✅ 标记为需保存
+      if (!this.cache.includes(the.ID)) {
+        this.cache.push(the.ID);
       }
     }
   }
@@ -258,11 +292,18 @@ class MessageBunch extends Bunch {
   filterCheck(the: string) {
     return this.filter[the] != undefined;
   }
+
+  setFilter(the: string) {
+    if (this.filter[the]) {
+      return;
+    }
+    this.filter[the] = true;
+  }
 }
 
 
-class ImageBunch extends Bunch {
-  The: Image[] = [];
+export class ImageBunch extends Bunch<Image> {
+  HidImage: Image = new Image();
 
   async load(the: StoreTar): Promise<void> {
     const entries = await the.getAllEntries();
@@ -304,52 +345,53 @@ class ImageBunch extends Bunch {
       this.cache.push(the.ID);
     }
   }
-  save(the: StoreTar) {
-    for (let now = this.cache.pop(); now != undefined; now = this.cache.pop()) {
-      the.put(now, this.The[this.fast[now]]);
+
+  get(ID: string) {
+    if (this.fast[ID]) {
+      return this.The[this.fast[ID]];
     }
+    return this.HidImage;
   }
 }
 
 
-class MessageBun extends Bunch {
-  The: Message[] = [];
-
-  __submit(the: Message) {
-    if (this.fast[the.timestamp]) {
+export class FriendReqBunch extends Bunch<FriendReq> {
+  async load(the: StoreTar): Promise<void> {
+    const entries = await the.getAllEntries();
+    entries.forEach((value, key) => {
+      const tar = value as FriendReq; // 类型根据具体 Bunch 调整
+      if (!this.fast.has(key)) {
+        this.fast[key] = this.The.length;
+        this.The.push(tar);
+      }
+    })
+  }
+  __submit(the: FriendReq) {
+    if (this.fast[the.ID]) {
       console.warn(`已存在的数据，拒绝  类型：${typeof this}`)
       return false;
     }
-    this.fast[the.timestamp] = this.The.length;
+    this.fast[the.ID] = this.The.length;
     this.The.push(the);
     return true;
   }
-  submit(the: Message) {
+  submit(the: FriendReq) {
     if (this.__submit(the)) {
-      this.cache.push(the.timestamp);
+      this.cache.push(the.ID);
     }
   }
-  __ubmit(the: Message) {
-    if (this.fast[the.timestamp]) {
-      this.The[this.fast[the.timestamp]] = the;
+  __ubmit(the: FriendReq) {
+    if (this.fast[the.ID]) {
+      this.The[this.fast[the.ID]] = the;
       return false;
     } else {
       this.__submit(the);
       return true;
     }
   }
-
-  // 目前禁止更新
-  ubmit(the: Message) {
-    return;
+  ubmit(the: FriendReq) {
     if (this.__ubmit(the)) {
-      this.cache.push(the.timestamp);
-    }
-  }
-
-  save(the: StoreTar) {
-    for (let now = this.cache.pop(); now != undefined; now = this.cache.pop()) {
-      the.put(now, this.The[this.fast[now]]);
+      this.cache.push(the.ID);
     }
   }
 }

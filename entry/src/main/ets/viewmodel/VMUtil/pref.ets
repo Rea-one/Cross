@@ -16,7 +16,7 @@ class Pref extends UIAbility {
 
   get(key: string): string {
     if (!this.The) {
-      throw new Error("Pref is not initialized.");
+      throw new Error("Pref 初始化失败");
     }
     let uInt8Array2 : preferences.ValueType = this.The.getSync(key, new Uint8Array(0));
     let textDecoder = util.TextDecoder.create('utf-8');

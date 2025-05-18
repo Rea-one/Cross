@@ -56,6 +56,6 @@ export function info2image(info: Info) {
   let the = new Image();
   the.ID = info.image;
   the.Timestamp = info.timestamp;
-  the.IconID = info.message;
+  the.URL = info.message;
   return the;
 }

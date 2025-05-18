@@ -1,31 +1,18 @@
-import { Storage } from "./storage";
-import { distributedKVStore } from "@kit.ArkData";
-import { Linker } from "./linker";
-import { socket } from "@kit.NetworkKit";
-import { fileIo } from "@kit.CoreFileKit"
-import { Pref } from "./preference";
-import { image } from '@kit.ImageKit';
-import { MaxCountType, MaxSelected } from "@kit.MediaLibraryKit";
-import { common } from '@kit.AbilityKit';
-import { One, Waiter } from "./manager";
-
+import FriendReq from "../model/friend_req";
+import Group from "../model/group";
+import waiter from "../viewmodel/waiter"
+import guide from "../viewmodel/navigator"
 
 @Component
 export struct Yours {
-  @Consume('pageStack') pageStack: NavPathStack;
-  @Consume('waiter') waiter: Waiter
+  @Provide('chatTar') chatTar: string = "";
 
-  @Provide('chatTar') chatTar: string = ""
+  @State addFriend: boolean = false;
 
-  @State unfold: Map<string, [boolean]> = new Map<string, [boolean]>()
-
-  @State addFriend: boolean = false
-
-  private context = this.getUIContext().getHostContext() as common.UIAbilityContext
 
   aboutToAppear(): void {
-    for (let elem of this.waiter.the_frd) {
-      this.unfold[elem[0]] = false
+    for (let elem of waiter.The_grp.The) {
+      elem.Unfolds = false;
     }
   }
 
@@ -33,19 +20,19 @@ export struct Yours {
     Tabs() {
       TabContent() {
         List() {
-          ForEach(this.waiter.the_hot, (item: string, index: number) => {
+          ForEach(waiter.The_hot.The, (ID: string) => {
             ListItem() {
               Button(){
                 Row() {
-                  Image(this.waiter.getImg(this.waiter.getSgn(item).IconID))
+                  Image(waiter.The_img.get(waiter.The_one.get(ID)?.IconID).URL);
                   Column() {
-                    Text(this.waiter.getSgn(item).Name)
+                    Text(waiter.The_one.get(ID)?.Name);
                   }
                 }
               }
               .onClick(() => {
-                this.chatTar = this.waiter.getSgn(item).Name
-                this.pageStack.pushPathByName("chat", "")
+                this.chatTar = ID
+                guide.to("chat");
               })
             }
           })
@@ -55,25 +42,25 @@ export struct Yours {
 
       TabContent() {
         List() {
-          ForEach(Array.from(this.unfold), (item: [string, boolean]) => {
+          ForEach(waiter.The_grp.The, (the: Group) => {
             ListItem() {
-              Button(item[0])
+              Button(the.Name)
                 .onClick(() => {
-                  item[1] = !item[1]
+                  the.Unfolds = !the.Unfolds;
                 })
             }
-            if (item[1]) {
-              ForEach(this.waiter.the_frd[item[0]], (target: string, index: number) => {
+            if (the.Unfolds) {
+              ForEach(the.The, (ID: string) => {
                 ListItem() {
                   Button(){
                     Row() {
-                      Image(this.waiter.getImg(this.waiter.getSgn(item[target]).IconID))
-                      Text(this.waiter.getSgn(item[0]).Name)
+                      Image(waiter.The_img.get(waiter.The_one.get(the.ID)?.IconID).URL);
+                      Text(waiter.The_one.get(ID)?.Name);
                     }
                   }
                   .onClick(() => {
-                    this.chatTar = item[0]
-                    this.pageStack.pushPathByName("chat", '')
+                    this.chatTar = ID
+                    guide.to("chat");
                   })
                 }
               })
@@ -82,26 +69,27 @@ export struct Yours {
         }
       }
       .tabBar("联系人")
+
       TabContent(){
         Column(){
           Row(){
             Text("昵称")
-            Text(this.waiter.self.Name)
+            Text(waiter.The_one.get(waiter.The_cfg.ID)?.Name)
           }
           Row(){
             Text("账号")
-            Text(this.waiter.self.ID)
+            Text(waiter.The_cfg.ID)
           }
           Row() {
             Button()
             List() {
               if (this.addFriend) {
 
-                ForEach(this.waiter.the_frq, (val: string) => {
+                ForEach(waiter.The_frq.The, (the: FriendReq) => {
                   ListItem() {
                     Row() {
-                      Image(this.waiter.the_img[this.waiter.the_sgn[val].IconID])
-                      Text(this.waiter.the_sgn[val].Name)
+                      Image(waiter.The_img.get(waiter.The_one.get(the.ID)?.IconID).URL);
+                      Text(waiter.The_one.get(the.ID)?.Name);
                       Button("同意")
                         .onClick(() => {
 
@@ -119,13 +107,13 @@ export struct Yours {
           Row(){
             Button("修改密码")
               .onClick(() => {
-                this.pageStack.pushPathByName("reset password","")
+                guide.to("reset password")
               })
           }
           Row(){
             Button("修改昵称")
               .onClick(() => {
-                this.pageStack.pushPathByName("reset Name", "")
+                guide.to("reset Name")
               })
           }
           Row(){

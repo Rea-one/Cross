@@ -5,10 +5,8 @@ import pref from "./VMUtil/pref"
 import SocketInfo from "../model/socket";
 import { arrayBufferToString } from "../util/BufferUtil"
 import info from "../model/info"
-import One from "../model/one";
-import Group from "../model/group";
 import { info2friend, info2group, info2image, info2message, info2one } from "../util/intrans";
-
+import guide from "./navigator"
 
 class Syncer {
   timestamp: string = "";
@@ -28,30 +26,32 @@ class Syncer {
         //   break;
         // case "image":
         //   break;
+        case "login success":
+          guide.to("yours");
+          break;
         case "one":
           let the_one = info2one(now);
-          waiter.write("one", the_one.ID, the_one);
+          waiter.write("one", the_one);
           break;
         case "group":
           let the_group = info2group(now);
-          waiter.write("group", "id", the_group);
+          waiter.write("group", the_group);
           break;
         case "friend":
           let the_friend = info2friend(now);
-          waiter.write("friend", the_friend.ID, the_friend);
+          waiter.write("friend", the_friend);
           break;
         case "message":
           let the_message = info2message(now);
-          waiter.write("message", "ID", the_message);
+          waiter.write("message", the_message);
           break;
         case "image":
           let the_img = info2image(now);
-          waiter.write("image", the_img.ID, the_img);
+          waiter.write("image", the_img);
         case "config":
-          waiter.write("config", "", now);
+          waiter.write("config", now);
           break;
       }
-      waiter.sync();
     })
   }
 

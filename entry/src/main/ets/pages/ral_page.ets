@@ -1,15 +1,9 @@
+import nets from "../viewmodel/nets"
 
-import {Linker} from './linker'
-import { promptAction } from '@kit.ArkUI';
-import { socket } from '@kit.NetworkKit';
-import { NetworkService, Waiter } from './manager';
+import guide from "../viewmodel/navigator"
 
 @Component
-export struct RegANDLog {
-
-  @Consume('pageStack') PageStack: NavPathStack;
-  @Consume('nets') nets: NetworkService
-  @Consume('waiter') waiter: Waiter
+export struct RalPage {
 
   @State account: string = '';
   @State password: string = '';
@@ -37,15 +31,12 @@ export struct RegANDLog {
         Row() {
           Button('注册')
             .onClick(() => {
-              this.PageStack.pushPathByName('register', '')
+              guide.to("yours");
             });
 
           Button('登录')
             .onClick(() => {
-              this.waiter.onLoginSuccess(() => {
-                this.PageStack.pushPathByName("yours", "")
-              })
-              this.nets.send(`a ${this.account} pw ${this.password} t lg`)
+              nets.send(`a ${this.account} pw ${this.password} t lg`)
             });
         }
       }

@@ -1,8 +1,12 @@
+import Message from "../model/message";
 import waiter from "../viewmodel/waiter"
-
+import nets from "../viewmodel/nets"
+import guide from "../viewmodel/navigator"
 
 @Component
 export struct ChatPage {
+  @Consume("chatTar") chatTar: string;
+
   @State target: string = ""
   @State message: string = ""
 
@@ -13,22 +17,23 @@ export struct ChatPage {
   build() {
     Column(){
       List() {
-        ForEach(waiter., (item: string, index: number) => {
+        ForEach(waiter.The_msg.get(this.chatTar)?.The, (the: Message) => {
           ListItem() {
-            if (item[0] == this.chatTar) {
+
+            if (the.sender == this.chatTar) {
               Row() {
-                if (this.friend != null) {
-                  Image(this.waiter.getImg(this.friend.IconID))
-                  Column() {
-                    Text(this.friend.Name)
-                    Text(item[1])
-                  }
-                } else {
-                  Image(this.waiter.getImg("default"))
-                  Column() {
-                    Text("这是一个名字")
-                    Text(item[1])
-                  }
+                Image(waiter.The_img.get(waiter.The_one.get(the.sender)?.IconID).URL);
+                Column() {
+                  Text(waiter.The_one.get(the.sender)?.Name);
+                  Text(the.the)
+                }
+              }
+            } else {
+              Row() {
+                Image(waiter.The_img.get(waiter.The_one.get(the.sender)?.IconID).URL);
+                Column() {
+                  Text(waiter.The_one.get(the.sender)?.Name);
+                  Text(the.the)
                 }
               }
             }
@@ -42,9 +47,7 @@ export struct ChatPage {
           })
         Button("发送")
           .onClick(() => {
-            if (this.self != null){
-              this.nets.send(`a ${this.self.ID} r ${this.chatTar} m ${this.message}`)
-            }
+            nets.send(`a ${waiter.The_cfg.ID} r ${this.chatTar} m ${this.message}`)
             this.message = ""
           })
       }

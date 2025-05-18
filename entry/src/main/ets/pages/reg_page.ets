@@ -1,7 +1,5 @@
-import { PromptAction } from '@kit.ArkUI'
-import {Linker} from './linker'
-import { socket } from '@kit.NetworkKit'
-import { NetworkService } from './manager'
+import nets from "../viewmodel/nets"
+import guide from "../viewmodel/navigator"
 
 @Component
 export struct RegPage
@@ -10,9 +8,6 @@ export struct RegPage
   @State cpassword: string ='';
   @State password: string = '';
   @State reject: boolean = true;
-  @Consume('nets') nets: NetworkService
-
-  @Consume('pageStack') pageStack:NavPathStack
 
   build()
   {
@@ -62,8 +57,8 @@ export struct RegPage
             if (!this.reject)
             {
               this.password = this.cpassword;
-              this.nets.send(`a ${this.account} pw ${this.password} t rg`);
-              this.pageStack.pop()
+              nets.send(`a ${this.account} pw ${this.password} t rg`);
+              guide.back();
               // this.pageStack.pushPathByName("ral", "");
               this.password = ''
               this.cpassword = ''
