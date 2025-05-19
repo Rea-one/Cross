@@ -14,11 +14,11 @@ struct Index {
   // @Provide("syn") syn: Syncer = new Syncer();
   @Builder
   The(name: string) {
-    if      (name === "chat")   { ChatPage(); }
-    else if (name === "ral")    { RalPage(); }
-    else if (name === "reg")    { RegPage(); }
-    else if (name === "yours")  { Yours(); }
-    else if (name === "wait")   { WaitPage(); }
+    if      (name == "chat")   { ChatPage(); }
+    else if (name == "ral")    { RalPage(); }
+    else if (name == "reg")    { RegPage(); }
+    else if (name == "yours")  { Yours(); }
+    else if (name == "wait")   { WaitPage(); }
     else                        { WaitPage(); }
   }
 
