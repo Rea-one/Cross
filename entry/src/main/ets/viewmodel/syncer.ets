@@ -51,6 +51,8 @@ class Syncer {
         case "config":
           waiter.write("config", now);
           break;
+        case "reject":
+          break;
       }
     })
   }

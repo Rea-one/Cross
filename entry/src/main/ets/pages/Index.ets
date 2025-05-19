@@ -6,6 +6,9 @@ import { Yours } from "../pages/yours";
 
 import guide from "../viewmodel/navigator"
 
+// 不可删除，网络接收由该模块完成
+import syncer from "../viewmodel/syncer"
+
 @Entry
 @Component
 struct Index {
@@ -31,5 +34,6 @@ struct Index {
         })
     }
     .navDestination(this.The)
+    .width("100%")
   }
 }
