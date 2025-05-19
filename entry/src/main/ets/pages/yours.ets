@@ -19,80 +19,90 @@ export struct Yours {
 
   build() {
     NavDestination() {
-      Row () {
-        Button("更多")
-          .onClick(() => {
-            
-          })
-      }
-      Tabs() {
-        TabContent() {
-          List() {
-            ForEach(waiter.The_hot.The, (ID: string) => {
-              ListItem() {
-                Button(){
-                  Row() {
-                    Image(waiter.The_img.get(waiter.The_one.get(ID)?.IconID).URL);
-                    Column() {
-                      Text(waiter.The_one.get(ID)?.Name);
-                    }
-                  }
-                }
-                .onClick(() => {
-                  this.chatTar = ID
-                  guide.to("chat");
-                })
-              }
-            })
-          }
-        }
-        .tabBar("消息")
+      Column() {
+        Row () {
+          Button("更多")
+            .onClick(() => {
 
-        TabContent() {
-          List() {
-            ForEach(waiter.The_grp.The, (the: Group) => {
-              ListItem() {
-                Button(the.Name)
-                  .onClick(() => {
-                    the.Unfolds = !the.Unfolds;
-                  })
-              }
-              if (the.Unfolds) {
-                ForEach(the.The, (ID: string) => {
-                  ListItem() {
-                    Button(){
-                      Row() {
-                        Image(waiter.The_img.get(waiter.The_one.get(the.ID)?.IconID).URL);
+            })
+            .margin({ right: 10 })
+        }
+        .margin({ right: 10 })
+        .width("100%")
+
+        Tabs({ barPosition: BarPosition.End }) {
+          TabContent() {
+            List() {
+              ForEach(waiter.The_hot.The, (ID: string) => {
+                ListItem() {
+                  Button(){
+                    Row() {
+                      Image(waiter.The_img.get(waiter.The_one.get(ID)?.IconID).URL);
+                      Column() {
                         Text(waiter.The_one.get(ID)?.Name);
                       }
                     }
-                    .onClick(() => {
-                      this.chatTar = ID
-                      guide.to("chat");
-                    })
                   }
-                })
-              }
-            })
+                  .onClick(() => {
+                    this.chatTar = ID
+                    guide.to("chat");
+                  })
+                }
+              })
+            }
+            .width("100%")
+            .height("100%")
           }
-        }
-        .tabBar("联系人")
+          .tabBar("消息")
 
-        TabContent(){
-          Column(){
-            Row(){
-              Text("昵称")
-              Text(waiter.The_one.get(waiter.The_cfg.ID)?.Name)
-            }
-            Row(){
-              Text("账号")
-              Text(waiter.The_cfg.ID)
-            }
-            Row() {
-              Button()
-              List() {
-                if (this.addFriend) {
 
+          TabContent() {
+            List() {
+              ForEach(waiter.The_grp.The, (the: Group) => {
+                ListItem() {
+                  Button(the.Name)
+                    .onClick(() => {
+                      the.Unfolds = !the.Unfolds;
+                    })
+                }
+                if (the.Unfolds) {
+                  ForEach(the.The, (ID: string) => {
+                    ListItem() {
+                      Button(){
+                        Row() {
+                          Image(waiter.The_img.get(waiter.The_one.get(the.ID)?.IconID).URL);
+                          Text(waiter.The_one.get(ID)?.Name);
+                        }
+                      }
+                      .onClick(() => {
+                        this.chatTar = ID
+                        guide.to("chat");
+                      })
+                    }
+                  })
+                }
+              })
+            }
+            .width("100%")
+            .height("100%")
+          }
+          .tabBar("联系人")
+
+          TabContent(){
+            Column(){
+              Row(){
+                Text("昵称")
+                Text(waiter.The_one.get(waiter.The_cfg.ID)?.Name)
+              }
+              .width("100%")
+              Row(){
+                Text("账号")
+                Text(waiter.The_cfg.ID)
+              }
+              .width("100%")
+              Row() {
+                Button()
+                List() {
                   ForEach(waiter.The_frq.The, (the: FriendReq) => {
                     ListItem() {
                       Row() {
@@ -110,31 +120,44 @@ export struct Yours {
                     }
                   })
                 }
+                .width("100%")
+                .height("100%")
               }
-            }
-            Row(){
-              Button("修改密码")
-                .onClick(() => {
-                  guide.to("reset password")
-                })
-            }
-            Row(){
-              Button("修改昵称")
-                .onClick(() => {
-                  guide.to("reset Name")
-                })
-            }
-            Row(){
-              Button("修改头像")
-                .onClick(() => {
+              .width("100%")
+              Row(){
+                Button("修改密码")
+                  .onClick(() => {
+                    guide.to("reset_password")
+                  })
+              }
+              .width("100%")
+              Row(){
+                Button("修改昵称")
+                  .onClick(() => {
+                    guide.to("reset_name")
+                  })
+              }
+              .width("100%")
+              Row(){
+                Button("修改头像")
+                  .onClick(() => {
 
-                })
+                  })
+              }
+              .width("100%")
             }
+            .height("100%")
+            .height("100%")
+            .justifyContent(FlexAlign.SpaceBetween)
           }
+          .tabBar("自己")
         }
-        .tabBar("自己")
+        .width("100%")
       }
+      .alignItems(HorizontalAlign.Center)
       .width("100%")
     }
+    .height("100%")
+    .width("100%")
   }
 }

@@ -4,6 +4,8 @@ import guide from "../view_model/navigator"
 
 import syncer from "../view_model/syncer"
 
+import { promptAction } from "@kit.ArkUI";
+
 @Component
 export struct RalPage {
   // @Consume("syn") syn: Syncer
@@ -19,8 +21,10 @@ export struct RalPage {
           TextInput({ placeholder: '请输入账号' })
             .onChange((value: string) => {
               this.account = value;
-            });
+            })
+            .width("100%")
         }
+        .width("90%")
 
         Row() {
           Text('密码');
@@ -28,8 +32,10 @@ export struct RalPage {
             .onChange((value: string) => {
               this.password = value;
             })
-            .type(InputType.Password);
+            .type(InputType.Password)
+            .width("100%")
         }
+        .width("90%")
 
         Row() {
           Button('注册')
@@ -41,17 +47,32 @@ export struct RalPage {
               nets.send(`a ${this.account} pw ${this.password} t lg`);
               // 开始轮询
               const pollInterval = setInterval(() => {
-                if (syncer.state === "login success") {
+                if (syncer.state === "login_success") {
                   clearInterval(pollInterval); // 停止轮询
                   guide.clear();
+
                   guide.to("yours");
                 } else if (syncer.state === "reject") {
                   clearInterval(pollInterval); // 停止轮询
+                  this.getUIContext().getPromptAction().showDialog
+                  ({
+                    title: '密码或账号错误！',
+                    buttons:
+                    [{
+                      text: '重新输入',
+                      color: '#000000'
+                    }]
+                  })
                 }
               }, 500); // 每500毫秒检查一次
-            });
+            })
         }
+        .width("80%")
+        .margin({ top: 10 })
+        .justifyContent(FlexAlign.SpaceBetween)
       }
+      .justifyContent(FlexAlign.SpaceBetween)
+      .margin({ bottom: 0 })
     }
   }
 }

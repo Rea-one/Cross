@@ -42,7 +42,7 @@ class Waiter {
 
       // 再继续加载数据
       this.timestamp = pref.get("timestamp");
-      this.The_cfg = pref.getOBJ("ID") as config;
+      this.The_cfg = pref.getOBJ("self") as config;
       this.The_hot = pref.getOBJ("hot") as hot;
 
       await Promise.all([
@@ -91,6 +91,9 @@ class Waiter {
 
 
   save() {
+    pref.put("timestamp", this.timestamp);
+    pref.putOBJ("self", this.The_cfg);
+    pref.putOBJ("hot", this.The_hot);
     this.The_one.save(dism.The["one"]);
     this.The_grp.save(dism.The["group"]);
     this.The_frd.save(dism.The["friend"]);

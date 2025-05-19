@@ -11,7 +11,6 @@ class Syncer {
   state: string = "";
 
   constructor() {
-    this.timestamp = waiter.timestamp;
     nets.subscribe((value: SocketInfo) => {
       let now = this.receive(value);
       switch (now.state) {
@@ -28,8 +27,8 @@ class Syncer {
         case "ping":
           nets.send("pong");
           break;
-        case "login success":
-          this.state = "login success";
+        case "login_success":
+          this.state = "login_success";
           break;
         case "one":
           let the_one = info2one(now);

@@ -1,5 +1,6 @@
 import nets from "../view_model/nets"
 import guide from "../view_model/navigator"
+import { promptAction } from "@kit.ArkUI";
 
 @Component
 export struct RegPage {
@@ -18,6 +19,7 @@ export struct RegPage {
               this.account = value;
             })
         }
+        .width("90%")
 
         Row() {
           Text('密码')
@@ -27,6 +29,7 @@ export struct RegPage {
             })
             .type(InputType.Password);
         }
+        .width("90%")
 
         Row() {
           Text('确认密码')
@@ -40,6 +43,7 @@ export struct RegPage {
             })
             .type(InputType.Password)
         }
+        .width("90%")
 
         Button('确认')
           .onClick(() => {
@@ -47,19 +51,13 @@ export struct RegPage {
               this.password = this.cpassword;
               nets.send(`a ${this.account} pw ${this.password} t rg`);
               guide.back();
-              this.password = ''
-              this.cpassword = ''
             } else {
-              this.getUIContext().getPromptAction().showDialog
-              ({
-                title: '输入密码不一致！',
-                buttons:
-                [{
-                  text: '重新输入',
-                  color: '#000000'
-                }]
+              promptAction.showToast({
+                message: "输入密码不一致"
               })
             }
+            this.password = ''
+            this.cpassword = ''
           })
       }
     }

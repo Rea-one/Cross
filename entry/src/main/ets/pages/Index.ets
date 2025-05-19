@@ -4,7 +4,11 @@ import { RegPage } from "../pages/reg_page";
 import { WaitPage } from "../pages/wait"
 import { Yours } from "../pages/yours";
 
+import nets from "../view_model/nets"
+
 import guide from "../view_model/navigator"
+
+import waiter from "../view_model/waiter"
 
 import syncer from "../view_model/syncer"
 
@@ -23,7 +27,7 @@ struct Index {
   }
 
   aboutToAppear(): void {
-    guide.to("wait");
+      guide.to("wait");
   }
   build() {
     Navigation(guide.The){
