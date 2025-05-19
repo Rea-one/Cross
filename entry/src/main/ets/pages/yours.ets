@@ -1,14 +1,14 @@
 import FriendReq from "../model/friend_req";
 import Group from "../model/group";
-import waiter from "../viewmodel/waiter"
-import guide from "../viewmodel/navigator"
+import waiter from "../view_model/waiter"
+import guide from "../view_model/navigator"
+
 
 @Component
 export struct Yours {
   @Provide('chatTar') chatTar: string = "";
 
   @State addFriend: boolean = false;
-
 
   aboutToAppear(): void {
     for (let elem of waiter.The_grp.The) {
@@ -126,5 +126,6 @@ export struct Yours {
       }
       .tabBar("更多")
     }
+    .width("100%")
   }
 }

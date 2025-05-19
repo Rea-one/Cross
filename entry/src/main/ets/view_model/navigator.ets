@@ -9,6 +9,9 @@ class PageStack {
   back() {
     this.The.pop()
   }
+  clear() {
+    this.The.clear();
+  }
 }
 
 export default new PageStack()

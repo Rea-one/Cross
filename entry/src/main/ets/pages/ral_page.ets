@@ -1,9 +1,12 @@
-import nets from "../viewmodel/nets"
+import nets from "../view_model/nets"
 
-import guide from "../viewmodel/navigator"
+import guide from "../view_model/navigator"
+
+import syncer from "../view_model/syncer"
 
 @Component
 export struct RalPage {
+  // @Consume("syn") syn: Syncer
 
   @State account: string = '';
   @State password: string = '';
@@ -31,12 +34,21 @@ export struct RalPage {
         Row() {
           Button('注册')
             .onClick(() => {
-              guide.to("yours");
+              guide.to("reg");
             });
-
           Button('登录')
             .onClick(() => {
-              nets.send(`a ${this.account} pw ${this.password} t lg`)
+              nets.send(`a ${this.account} pw ${this.password} t lg`);
+              // 开始轮询
+              const pollInterval = setInterval(() => {
+                if (syncer.state === "login success") {
+                  clearInterval(pollInterval); // 停止轮询
+                  guide.clear();
+                  guide.to("yours");
+                } else if (syncer.state === "reject") {
+                  clearInterval(pollInterval); // 停止轮询
+                }
+              }, 500); // 每500毫秒检查一次
             });
         }
       }

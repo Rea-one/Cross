@@ -8,8 +8,6 @@ import dism from "./VMUtil/dism"
 import pref from "./VMUtil/pref"
 
 
-
-import distributedKVStore from "@ohos.data.distributedKVStore"
 import One from "../model/one"
 import Group from "../model/group"
 import Friend from "../model/friend"
@@ -18,6 +16,7 @@ import Image from "../model/image"
 
 
 class Waiter {
+  public timestamp = "";
   public The_cfg: config = new config();
   public The_hot: hot = new hot();
   public The_one: OneBunch = new OneBunch();
@@ -35,13 +34,17 @@ class Waiter {
     this.init();
   }
 
-
   async init(): Promise<void> {
+    if (this.initialized) return;
+
     try {
+      pref.onCreate(); // 等待 Pref 初始化完成
+
+      // 再继续加载数据
+      this.timestamp = pref.get("timestamp");
       this.The_cfg = pref.getOBJ("ID") as config;
       this.The_hot = pref.getOBJ("hot") as hot;
 
-      // 并行加载所有数据
       await Promise.all([
         this.The_one.load(dism.The["one"]),
         this.The_grp.load(dism.The["group"]),

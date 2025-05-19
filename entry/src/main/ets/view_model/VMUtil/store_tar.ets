@@ -7,7 +7,6 @@ import { TransInside, TransOutside } from "../../util/intrans"
 import distributedKVStore from "@ohos.data.distributedKVStore";
 
 
-// store_tar.ets
 
 export default class StoreTar {
   public The: distributedKVStore.SingleKVStore | null = null;

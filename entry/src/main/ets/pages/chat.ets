@@ -1,7 +1,7 @@
 import Message from "../model/message";
-import waiter from "../viewmodel/waiter"
-import nets from "../viewmodel/nets"
-import guide from "../viewmodel/navigator"
+import waiter from "../view_model/waiter"
+import nets from "../view_model/nets"
+import guide from "../view_model/navigator"
 
 @Component
 export struct ChatPage {

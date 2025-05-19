@@ -1,5 +1,5 @@
-import nets from "../viewmodel/nets"
-import guide from "../viewmodel/navigator"
+import nets from "../view_model/nets"
+import guide from "../view_model/navigator"
 
 @Component
 export struct RegPage {
@@ -47,7 +47,6 @@ export struct RegPage {
               this.password = this.cpassword;
               nets.send(`a ${this.account} pw ${this.password} t rg`);
               guide.back();
-              // this.pageStack.pushPathByName("ral", "");
               this.password = ''
               this.cpassword = ''
             } else {

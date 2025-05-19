@@ -1,4 +1,4 @@
-import navigator from "../viewmodel/navigator"
+import navigator from "../view_model/navigator"
 
 @Component
 export struct WaitPage

@@ -4,15 +4,14 @@ import { RegPage } from "../pages/reg_page";
 import { WaitPage } from "../pages/wait"
 import { Yours } from "../pages/yours";
 
-import guide from "../viewmodel/navigator"
+import guide from "../view_model/navigator"
 
-// 不可删除，网络接收由该模块完成
-import syncer from "../viewmodel/syncer"
+import syncer from "../view_model/syncer"
 
 @Entry
 @Component
 struct Index {
-
+  // @Provide("syn") syn: Syncer = new Syncer();
   @Builder
   The(name: string) {
     if      (name === "chat")   { ChatPage(); }

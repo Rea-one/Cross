@@ -1,18 +1,17 @@
 
 import nets from "./nets"
 import waiter from "./waiter"
-import pref from "./VMUtil/pref"
 import SocketInfo from "../model/socket";
 import { arrayBufferToString } from "../util/BufferUtil"
 import info from "../model/info"
 import { info2friend, info2group, info2image, info2message, info2one } from "../util/intrans";
-import guide from "./navigator"
 
 class Syncer {
   timestamp: string = "";
+  state: string = "";
 
   constructor() {
-    this.timestamp = pref.get("timestamp");
+    this.timestamp = waiter.timestamp;
     nets.subscribe((value: SocketInfo) => {
       let now = this.receive(value);
       switch (now.state) {
@@ -26,8 +25,11 @@ class Syncer {
         //   break;
         // case "image":
         //   break;
+        case "ping":
+          nets.send("pong");
+          break;
         case "login success":
-          guide.to("yours");
+          this.state = "login success";
           break;
         case "one":
           let the_one = info2one(now);

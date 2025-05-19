@@ -17,7 +17,7 @@ class Nets {
 
   init(){
     // 启动网络
-    this.address.address = " 192.168.43.12";
+    this.address.address = "192.168.43.188";
     this.address.port = 25054;
   }
 
