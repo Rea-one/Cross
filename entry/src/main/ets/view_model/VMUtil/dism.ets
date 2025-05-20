@@ -5,6 +5,8 @@ import StoreTar from "./store_tar"
 
 import distributedKVStore from "@ohos.data.distributedKVStore"
 
+
+// 对于特定的存储库的封装
 class Dism {
   The: Map<string, StoreTar> = new Map<string, StoreTar>();
   public targets: string[] = ["one", "group", "friend", "message", "image", "friendReq"];

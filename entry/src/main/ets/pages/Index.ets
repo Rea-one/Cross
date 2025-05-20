@@ -16,6 +16,8 @@ import syncer from "../view_model/syncer"
 @Component
 struct Index {
   // @Provide("syn") syn: Syncer = new Syncer();
+
+  // 导航表，目前不知道怎么封装
   @Builder
   The(name: string) {
     if      (name == "chat")   { ChatPage(); }

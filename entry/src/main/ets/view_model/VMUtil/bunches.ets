@@ -7,6 +7,8 @@ import FriendReq from "../../model/friend_req"
 import StoreTar from "./store_tar"
 import { max, min } from "../../util/normal"
 
+
+// 对于基础model的封装
 export class Bunch<T> {
   ID: string = "";
   public The: T[] = []

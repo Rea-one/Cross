@@ -5,7 +5,8 @@ import { preferences } from "@kit.ArkData"
 import { UIAbility } from "@kit.AbilityKit"
 import { util } from "@kit.ArkTS";
 
-
+// 首选项模块，目前不知道为什么这里的创建会失败
+// 怀疑是权限或者context的问题
 class Pref extends UIAbility {
   Options: preferences.Options = { name: "now" };
   The: preferences.Preferences | null = null;

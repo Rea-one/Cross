@@ -14,7 +14,8 @@ import Friend from "../model/friend"
 import Message from "../model/message"
 import Image from "../model/image"
 
-
+// 对于存储的封装
+// 现在首选项部分经验证为不可用
 class Waiter {
   public timestamp = "";
   public The_cfg: config = new config();

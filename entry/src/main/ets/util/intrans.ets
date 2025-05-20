@@ -5,6 +5,9 @@ import Info from "../model/info";
 import Message from "../model/message";
 import One from "../model/one";
 
+
+// 将socketInfo 转换成json
+
 export function TransInside(value: object): string {
   return JSON.stringify(value)
 }

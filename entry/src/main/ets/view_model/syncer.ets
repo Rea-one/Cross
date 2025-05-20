@@ -10,6 +10,7 @@ class Syncer {
   timestamp: string = "";
   state: string = "";
 
+  // 创建时订阅网络请求，在这里完善网络信息处理
   constructor() {
     nets.subscribe((value: SocketInfo) => {
       let now = this.receive(value);

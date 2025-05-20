@@ -1,15 +1,17 @@
 
-
 import SocketInfo from "../model/socket";
 
 import { socket } from "@kit.NetworkKit";
 import { BusinessError } from "@kit.BasicServicesKit";
 import { UIAbility } from "@kit.AbilityKit";
 
+
+// 对于网络的封装
 class Nets {
   Sock: socket.TCPSocket = socket.constructTCPSocketInstance();
   address: socket.NetAddress = {} as socket.NetAddress;
 
+  // 目前仅支持创建时连接
   constructor() {
     this.init();
     this.connect();
@@ -41,4 +43,5 @@ class Nets {
   }
 }
 
+// 导出唯一的网络模块
 export default new Nets()
